@@ -1,0 +1,64 @@
+import java.util.Scanner;
+
+/**
+ * Головний клас програми, що генерує числа Люка
+ * та перевіряє їх на належність до формули w^2 - 1.
+ */
+public class Main {
+
+    /**
+     * Точка входу в програму.
+     *
+     * @param args аргументи командного рядка (не використовуються)
+     */
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int N = 0;
+
+        // Введення кількості чисел Люка з перевіркою на коректність
+        while (N > 91 || N <= 0) {
+            System.out.print("Введіть кількість чисел Люка яку бажаєте обробити (не більше 91): ");
+            N = sc.nextInt();
+        }
+
+        // Масив об'єктів для зберігання чисел Люка
+        LykeNumb[] LykeNumbs = new LykeNumb[N];
+
+        // Початкові два елементи послідовності
+        LykeNumbs[0] = new LykeNumb(1, 2);
+        LykeNumbs[1] = new LykeNumb(2, 1);
+
+        generateNumbers(LykeNumbs, N);
+        sc.close();
+    }
+
+    /**
+     * Генерує числа Люка та виводить ті,
+     * які задовольняють умову {@code number = w^2 - 1}.
+     *
+     * @param arr масив для зберігання об'єктів {@link LykeNumb}
+     * @param N кількість чисел для генерації
+     */
+    public static void generateNumbers(LykeNumb[] arr, int N){
+        int f = 0, s = 1, t = 2;
+        int square = 0;
+
+        // Побудова послідовності чисел Люка
+        while (t < N) {
+            arr[t] = new LykeNumb(t + 1, arr[f].getNumber() + arr[s].getNumber());
+
+            // Перевірка, чи належить число до формули w^2 - 1
+            if (arr[t].check() == 1) {
+                square++;
+                System.out.println("Число " + arr[t].getNumber() +
+                        ", з позицією " + arr[t].getNumbinlist());
+                System.out.println("Є елементом формули w^2-1");
+            }
+
+            f++;
+            s++;
+            t++;
+        }
+        System.out.println("Загальна кількість чисел що підпадають під дану формулу : " + square);
+    }
+}
